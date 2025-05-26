@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script src="https://js.chargebee.com/v2/chargebee.js" data-cb-site="chargebee-assessment5-test"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Yash Vacations</title>
   <link rel="stylesheet" href="style.css" />
+
+  <!-- Chargebee JS SDK -->
+  <script src="https://js.chargebee.com/v2/chargebee.js" data-cb-site="chargebee-assessment5-test"></script>
 </head>
 <body>
   <nav>
@@ -31,26 +33,42 @@
     <img src="images/hotel.jpg" alt="Hotel Image" />
   </section>
 
-  <!-- 🔁 Self-Service Portal Button -->
-  <button data-cb-type="portal">🧾 Manage Account</button>
+  <!-- Self-service Portal Button -->
+  <button onclick="Chargebee.getInstance().openPortal()">🧾 Manage Account</button>
 
   <section id="plans">
     <h2>📦 Our Plans</h2>
+
     <div class="plan">
       <h3>⛺ Camp Delight</h3>
       <p>Enjoy tent stays & bonfire evenings. <strong>$99</strong></p>
-      <button data-cb-type="checkout" data-cb-plan-id="camp-delight">Subscribe</button>
+      <button onclick="openCheckout('camp-delight')">Subscribe</button>
     </div>
+
     <div class="plan">
       <h3>🏕️ Adventure Bliss</h3>
       <p>Includes hiking, local cuisine, and tents. <strong>$149</strong></p>
-      <button data-cb-type="checkout" data-cb-plan-id="adventure-bliss">Subscribe</button>
+      <button onclick="openCheckout('adventure-bliss')">Subscribe</button>
     </div>
+
     <div class="plan">
       <h3>🏨 Royal Escape</h3>
       <p>Stay in 5-star hotels with guided tours. <strong>$299</strong></p>
-      <button data-cb-type="checkout" data-cb-plan-id="royal-escape">Subscribe</button>
+      <button onclick="openCheckout('royal-escape')">Subscribe</button>
     </div>
   </section>
+
+  <!-- Script to open Chargebee checkout -->
+  <script>
+    const chargebeeInstance = Chargebee.getInstance();
+
+    function openCheckout(planId) {
+      chargebeeInstance.openCheckout({
+        hostedPage: function () {
+          return chargebeeInstance.getCart().setPlan(planId).requestCheckout();
+        }
+      });
+    }
+  </script>
 </body>
 </html>
